@@ -9,12 +9,13 @@ import { useMutation, useQuery } from "convex/react";
 import { PlusIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { use } from "react";
+import { ChatRow } from "./chatrow";
 
 const Sidebar = () => {
   const router = useRouter();
   const { closeMobileNav, isMobileNavOpen } = use(NavigationContext);
 
-  // const chats = useQuery(api.chats.listChats);
+  const chats = useQuery(api.chats.listChats);
   const createChat = useMutation(api.chats.createChat);
   const deleteChat = useMutation(api.chats.deleteChat);
 
@@ -34,7 +35,7 @@ const Sidebar = () => {
 
   return (
     <>
-      {/* Bckground Overlay for Mobile  */}
+      {/* Background Overlay for Mobile Nav */}
       {isMobileNavOpen && (
         <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm" onClick={closeMobileNav} />
       )}
@@ -53,9 +54,8 @@ const Sidebar = () => {
             <PlusIcon className="mr-2 h-4 w-4" /> New Chat
           </Button>
         </div>
-
         <div className="flex-1 overflow-y-auto space-y-2.5 p-4 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent">
-          {/* {chats?.map(chat => <ChatRow key={chat._id} chat={chat} onDelete={handleDeleteChat} />)} */}
+          {chats?.map((chat) => <ChatRow key={chat._id} chat={chat} onDelete={handleDeleteChat} />)}
         </div>
       </div>
     </>

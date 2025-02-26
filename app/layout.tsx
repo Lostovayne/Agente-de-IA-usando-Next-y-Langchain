@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Agent AI Langchain",
-  description: "Asistente personalizado para AI",
+  description: "Asistente Personalizado para AI",
 };
 
 export default function RootLayout({
