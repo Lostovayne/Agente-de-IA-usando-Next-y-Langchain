@@ -31,7 +31,15 @@ export const ChatRow = ({ chat, onDelete }: ChatRowProps) => {
       <div className="p-4">
         <div className="flex justify-between items-start">
           Chat
-          <Button>
+          <Button
+            variant={"ghost"}
+            size={"icon"}
+            className="opacity-0 group-hover:opacity-100 -mr-2 ml-2  transition-opacity duration-200"
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete(chat._id);
+            }}
+          >
             <TrashIcon className="size-4 text-gray-400 hover:text-red-500 transition-colors duration-300" />
           </Button>
         </div>
