@@ -33,6 +33,17 @@ export const ChatInterface = ({ chatId, initialMessages }: ChatInterfaceProps) =
     setStreamedResponse("");
     setCurrentTool(null);
     setIsLoading(true);
+
+    //* Add users message immediately for better UX
+    const optimisticUserMessage: Doc<"messages"> = {
+      _id: `temp_${Date.now()}`,
+      chatId,
+      content: trimmedInput,
+      role: "user",
+      createdAt: Date.now(),
+      _creationTime: Date.now(),
+    } as unknown as Doc<"messages">;
+    setMessages((prev) => [...prev, optimisticUserMessage]);
   };
 
   return (
@@ -42,6 +53,9 @@ export const ChatInterface = ({ chatId, initialMessages }: ChatInterfaceProps) =
         <section className="bg-red-50 flex-1">
           <div>
             {/* Previous Messages */}
+            {messages.map((message) => (
+              <div key={message._id}>{message.content}</div>
+            ))}
 
             {/* Last Message */}
             <div ref={messagesEndRef} />
