@@ -2,7 +2,7 @@
 import { Doc, Id } from "@/convex/_generated/dataModel";
 import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "./ui/button";
 
 interface ChatInterfaceProps {
@@ -16,6 +16,11 @@ export const ChatInterface = ({ chatId, initialMessages }: ChatInterfaceProps) =
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [streamedResponse, setStreamedResponse] = useState<string>("");
   const [currentTool, setCurrentTool] = useState<{ name: string; input: unknown } | null>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, streamedResponse]);
 
   // Function to handle form submission
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -34,7 +39,14 @@ export const ChatInterface = ({ chatId, initialMessages }: ChatInterfaceProps) =
     <div>
       <main className="flex flex-col h-[calc(100vh-theme(spacing.14))]">
         {/* Messages */}
-        <section className="bg-red-50 flex-1"></section>
+        <section className="bg-red-50 flex-1">
+          <div>
+            {/* Previous Messages */}
+
+            {/* Last Message */}
+            <div ref={messagesEndRef} />
+          </div>
+        </section>
 
         {/* footer */}
         <footer className="border-t bg-white p-4">
