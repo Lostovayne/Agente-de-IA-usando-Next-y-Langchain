@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "./ui/button";
+import { ChatRequestBody } from "@/lib/types";
 
 interface ChatInterfaceProps {
   chatId: Id<"chats">;
@@ -44,6 +45,23 @@ export const ChatInterface = ({ chatId, initialMessages }: ChatInterfaceProps) =
       _creationTime: Date.now(),
     } as unknown as Doc<"messages">;
     setMessages((prev) => [...prev, optimisticUserMessage]);
+
+    //* Track complete response for saving database
+    const fullResponse = "";
+
+    //* Start Streaming Response
+    try {
+      const requestBody: ChatRequestBody = {
+        messages: messages.map((message) => ({
+          role: message.role,
+          content: message.content,
+        })),
+        new_message: trimmedInput,
+        chatId,
+      };
+    } catch (error) {
+      console.error("Error streaming response:", error);
+    }
   };
 
   return (
