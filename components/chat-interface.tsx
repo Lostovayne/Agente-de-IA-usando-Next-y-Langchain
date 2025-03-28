@@ -1,10 +1,10 @@
 "use client";
 import { Doc, Id } from "@/convex/_generated/dataModel";
+import { ChatRequestBody } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "./ui/button";
-import { ChatRequestBody } from "@/lib/types";
 
 interface ChatInterfaceProps {
   chatId: Id<"chats">;
@@ -24,7 +24,7 @@ export const ChatInterface = ({ chatId, initialMessages }: ChatInterfaceProps) =
   }, [messages, streamedResponse]);
 
   // Function to handle form submission
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const trimmedInput = input.trim();
     if (!trimmedInput || isLoading) return;
@@ -59,8 +59,25 @@ export const ChatInterface = ({ chatId, initialMessages }: ChatInterfaceProps) =
         new_message: trimmedInput,
         chatId,
       };
+
+      //* Initialize SSE Connection
+      const response = await fetch("/api/chat/stream", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestBody),
+      });
+      if (!response.ok) throw new Error(await response.text());
+      if (!response.ok) throw new Error("No response body available");
+
+      //* Handle the stream
+
     } catch (error) {
       console.error("Error streaming response:", error);
+      //* Remove optimistic message
+      setMessages((prev) => prev.filter((message) => message._id !== optimisticUserMessage._id));
+      setStreamedResponse("Error streaming response");
+    } finally {
+      setIsLoading(false);
     }
   };
 
