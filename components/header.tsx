@@ -28,6 +28,9 @@ export default function Header() {
         </div>
         <div className="flex items-center">
           <UserButton
+            fallback={
+              <div className="size-8 rounded-full bg-gray-200/50 p-0.5 ring-2 ring-gray-300/50 ring-offset-2 transition-shadow hover:ring-gray-400/50" />
+            }
             appearance={{
               elements: {
                 avatarBox:
