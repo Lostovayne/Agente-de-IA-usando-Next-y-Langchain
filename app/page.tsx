@@ -18,9 +18,7 @@ export default function LandingPage() {
           <p className="max-w-[600px] text-lg text-gray-600 md:text-xl/relaxed xl:text-2xl/relaxed">
             Meet your new AI chat companion that goes beyond conversation - it can actually get things done!
             <br />
-            <span className="text-gray-400 text-sm">
-              Powered by IBM&apos;s WxTools & your favourite LLM&apos;s.
-            </span>
+            <span className="text-gray-400 text-sm">Powered by IBM&apos;s WxTools & your favourite LLM&apos;s.</span>
           </p>
         </header>
 
@@ -37,15 +35,17 @@ export default function LandingPage() {
           </SignedIn>
         </div>
 
-        <SignedOut>
-          <SignInButton mode="modal" fallbackRedirectUrl={"/dashboard"} forceRedirectUrl={"/dashboard"}>
-            <button className="group relative inline-flex items-center justify-center px-8 py-3.5 text-base font-medium text-white bg-gradient-to-r from-gray-900 to-gray-800 rounded-full hover:from-gray-800 hover:to-gray-700 transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5">
-              Sign Up
-              <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-0.5" />
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-gray-900/20 to-gray-800/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-            </button>
-          </SignInButton>
-        </SignedOut>
+        <div className="h-14">
+          <SignedOut>
+            <SignInButton mode="modal" fallbackRedirectUrl={"/dashboard"} forceRedirectUrl={"/dashboard"}>
+              <button className="group relative inline-flex items-center justify-center px-8 py-3.5 text-base font-medium text-white bg-gradient-to-r from-gray-900 to-gray-800 rounded-full hover:from-gray-800 hover:to-gray-700 transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5">
+                Sign Up
+                <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-0.5" />
+                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-gray-900/20 to-gray-800/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+              </button>
+            </SignInButton>
+          </SignedOut>
+        </div>
 
         {/* Features grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-16 pt-8 max-w-3xl mx-auto">
