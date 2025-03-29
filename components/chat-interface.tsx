@@ -56,7 +56,7 @@ export const ChatInterface = ({ chatId, initialMessages }: ChatInterfaceProps) =
           role: message.role,
           content: message.content,
         })),
-        new_message: trimmedInput,
+        newMessage: trimmedInput,
         chatId,
       };
 
