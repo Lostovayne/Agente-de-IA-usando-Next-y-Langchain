@@ -1,3 +1,4 @@
+
 import { api } from "@/convex/_generated/api";
 import { getConvexClient } from "@/lib/convex";
 import { ChatRequestBody, SSE_DATA_PREFIX, SSE_LINE_DELIMITER, StreamMessage, StreamMessageType } from "@/lib/types";
@@ -31,7 +32,9 @@ export async function POST(request: Request) {
       },
     });
 
+
     //* Send the initial message to the client
+
     const startStream = async () => {
       try {
         //* Send initial connection stableshed message
