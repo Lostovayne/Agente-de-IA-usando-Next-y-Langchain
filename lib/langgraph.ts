@@ -2,6 +2,10 @@ import { ChatGroq } from "@langchain/groq";
 import { ToolNode } from "@langchain/langgraph/prebuilt";
 import wxflows from "@wxflows/sdk/langchain";
 
+
+//Customers at : https://introspection.apis.stepzen.com/customers
+// Comments at: https://dummyjson.com/comments
+
 // Connect to WxFlows
 const toolClient = new wxflows({
   endpoint: process.env.WXFLOWS_ENDPOINT || "",
