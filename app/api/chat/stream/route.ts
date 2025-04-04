@@ -31,7 +31,7 @@ export async function POST(request: Request) {
       },
     });
 
-    //? Send the initial message to the client
+    //* Send the initial message to the client
     const startStream = async () => {
       try {
         //* Send initial connection stableshed message
@@ -46,6 +46,7 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: "Failed to process chat request" } as const, { status: 500 });
       }
     };
+
     startStream();
     return response;
   } catch (error) {
