@@ -36,7 +36,7 @@ const Sidebar = () => {
   return (
     <>
       {/* Background Overlay for Mobile Nav */}
-      {isMobileNavOpen && <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm" onClick={closeMobileNav} />}
+      {isMobileNavOpen && <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs" onClick={closeMobileNav} />}
       <div
         className={cn(
           "fixed md:inset-y-0 top-14 bottom-0 left-0 z-50 w-72 bg-gray-50/80 backdrop-blur-xl border-r border-gray-200/50 transform transition-transform duration-300 ease-in-out md:relative md:translate-x-0 md:top-0 flex flex-col",
@@ -46,7 +46,7 @@ const Sidebar = () => {
         <div className="p-4 border-b border-gray-200/50">
           <Button
             onClick={handleNewChat}
-            className="w-full bg-white hover:bg-gray-50 text-gray-700 border border-gray-200/50 shadow-sm hover:shadow transition-all duration-200"
+            className="w-full bg-white hover:bg-gray-50 text-gray-700 border border-gray-200/50 shadow-xs hover:shadow-sm transition-all duration-200"
           >
             <PlusIcon className="mr-2 h-4 w-4" /> New Chat
           </Button>

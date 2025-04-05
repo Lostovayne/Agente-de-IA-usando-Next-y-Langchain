@@ -83,7 +83,7 @@ export const ChatInterface = ({ chatId, initialMessages }: ChatInterfaceProps) =
 
   return (
     <div>
-      <main className="flex flex-col h-[calc(100vh-theme(spacing.14))]">
+      <main className="flex flex-col h-[calc(100vh-(--spacing(14)))]">
         {/* Messages */}
         <section className="bg-red-50 flex-1">
           <div>
@@ -106,12 +106,12 @@ export const ChatInterface = ({ chatId, initialMessages }: ChatInterfaceProps) =
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Message Ai Agent..."
-                className="flex-1 py-3 rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-sm pl-2 pr-12 bg-gray-50 placeholder:text-gray-500"
+                className="flex-1 py-3 rounded-2xl border border-gray-200 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-sm pl-2 pr-12 bg-gray-50 placeholder:text-gray-500"
               />
               <Button
                 className={cn(
                   "absolute right-1.5 rounded-xl size-9 p-0 flex items-center justify-center transition-all",
-                  input.trim() ? "bg-blue-600 hover:bg-blue-700 text-white shadow-sm" : "bg-gray-100 text-gray-400"
+                  input.trim() ? "bg-blue-600 hover:bg-blue-700 text-white shadow-xs" : "bg-gray-100 text-gray-400"
                 )}
                 type="submit"
                 disabled={isLoading || !input.trim()}

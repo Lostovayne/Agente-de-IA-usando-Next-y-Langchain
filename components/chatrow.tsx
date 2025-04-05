@@ -25,7 +25,7 @@ export const ChatRow = ({ chat, onDelete }: ChatRowProps) => {
 
   return (
     <div
-      className="group rounded-xl border border-gray-200/30 bg-white/50 backdrop-blur-sm hover:bg-white/80 transition-all duration-200 cursor-pointer shadow-sm hover:shadow-md"
+      className="group rounded-xl border border-gray-200/30 bg-white/50 backdrop-blur-xs hover:bg-white/80 transition-all duration-200 cursor-pointer shadow-xs hover:shadow-md"
       onClick={handleClick}
     >
       <div className="p-4">
