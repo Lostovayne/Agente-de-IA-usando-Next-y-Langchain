@@ -2,6 +2,7 @@ import { ChatGroq } from "@langchain/groq";
 import { ToolNode } from "@langchain/langgraph/prebuilt";
 import wxflows from "@wxflows/sdk/langchain";
 import { END, MessagesAnnotation, START, StateGraph } from "@langchain/langgraph";
+import { ChatPromptTemplate, MessagesPlaceholder } from "@langchain/core/prompts";
 import SYSTEM_MESSAGE from "@/constants/systemMessage";
 
 //Customers at : https://introspection.apis.stepzen.com/customers
@@ -47,5 +48,15 @@ const createWorkflow = () => {
   const model = initialiserModel();
   const stateGraph = new StateGraph(MessagesAnnotation).addNode("agent", async (state) => {
     const systemContent = SYSTEM_MESSAGE;
+
+    // Create the prompt template with system and message placeholder
+    const promptTemplate = ChatPromptTemplate.fromMessages([
+        new SystemMessage(systemContent,{
+          cache_control: { type: "ephemeral"}
+        }),
+        new MessagesPlaceholder("messages"),
+      ])
+    ])
+
   });
 };
