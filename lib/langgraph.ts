@@ -1,16 +1,14 @@
 import { ChatGroq } from "@langchain/groq";
 import { ToolNode } from "@langchain/langgraph/prebuilt";
 import wxflows from "@wxflows/sdk/langchain";
-
+import { END, MessagesAnnotation, START, StateGraph } from "@langchain/langgraph";
+import SYSTEM_MESSAGE from "@/constants/systemMessage";
 
 //Customers at : https://introspection.apis.stepzen.com/customers
-// Comments at: https://dummyjson.com/comments  a wxflows import curl + url 
+// Comments at: https://dummyjson.com/comments  a wxflows import curl + url
 
 // Connect to WxFlows
-const toolClient = new wxflows({
-  endpoint: process.env.WXFLOWS_ENDPOINT || "",
-  apikey: process.env.WXFLOWS_APIKEY,
-});
+const toolClient = new wxflows({ endpoint: process.env.WXFLOWS_ENDPOINT || "", apikey: process.env.WXFLOWS_APIKEY });
 
 // Retrieve the tools
 const tools = await toolClient.lcTools;
@@ -20,7 +18,7 @@ if (!process.env.GROQ_MODEL) {
   throw new Error("GROQ_MODEL is not defined in the environment variables");
 }
 
-export const initialiserModel = () => {
+const initialiserModel = () => {
   const model = new ChatGroq({
     model: process.env.GROQ_MODEL as string,
     apiKey: process.env.GROQ_API_KEY as string,
@@ -43,4 +41,11 @@ export const initialiserModel = () => {
     ],
   }).bindTools(tools);
   return model;
+};
+
+const createWorkflow = () => {
+  const model = initialiserModel();
+  const stateGraph = new StateGraph(MessagesAnnotation).addNode("agent", async (state) => {
+    const systemContent = SYSTEM_MESSAGE;
+  });
 };
