@@ -4,7 +4,7 @@ import wxflows from "@wxflows/sdk/langchain";
 
 
 //Customers at : https://introspection.apis.stepzen.com/customers
-// Comments at: https://dummyjson.com/comments
+// Comments at: https://dummyjson.com/comments  a wxflows import curl + url 
 
 // Connect to WxFlows
 const toolClient = new wxflows({

@@ -4,6 +4,7 @@ schema
       "wikipedia/index.graphql"
       "tools.graphql"
       "google_books/index.graphql"
+      "curl/index.graphql"
     ]
   ) {
   query: Query
