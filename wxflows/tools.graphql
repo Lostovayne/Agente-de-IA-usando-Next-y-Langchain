@@ -44,9 +44,8 @@ extend type Query {
         {
           name: "description"
           const: "Retrieve customer information including their address and order history. Returns customer details like name, email, address, and past orders with shipping information. To search for customer with id:1, use the curl followed bt 1/ i.e. https://api.example.com/customers/1"
-          name: "fields"
-          const: "customerQuery"
         }
+        { name: "fields", const: "customerQuery" }
       ]
     )
   youtube_transcript: TC_GraphQL
