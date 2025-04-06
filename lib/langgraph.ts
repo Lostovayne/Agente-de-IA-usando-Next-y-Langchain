@@ -1,8 +1,8 @@
 import SYSTEM_MESSAGE from "@/constants/systemMessage";
-import { AIMessage, SystemMessage, trimMessages } from "@langchain/core/messages";
+import { AIMessage, BaseMessage, SystemMessage, trimMessages } from "@langchain/core/messages";
 import { ChatPromptTemplate, MessagesPlaceholder } from "@langchain/core/prompts";
 import { ChatGroq } from "@langchain/groq";
-import { END, MessagesAnnotation, START, StateGraph } from "@langchain/langgraph";
+import { END, MemorySaver, MessagesAnnotation, START, StateGraph } from "@langchain/langgraph";
 import { ToolNode } from "@langchain/langgraph/prebuilt";
 import wxflows from "@wxflows/sdk/langchain";
 
@@ -95,3 +95,24 @@ const createWorkflow = () => {
 
   return stateGraph;
 };
+
+export async function submitQuestion(messages: BaseMessage[], chatId: string) {
+  const workflow = createWorkflow();
+  // Create a checkpoint for the workflow
+  const checkpointer = new MemorySaver();
+  const app = workflow.compile({ checkpointer });
+
+  // Run the graph and stream
+  const stream = await app.streamEvents(
+    { messages },
+    {
+      version: "v2",
+      configurable: {
+        threadId: chatId,
+      },
+      streamMode: "messages",
+      runId: chatId,
+    }
+  );
+  return stream;
+}
