@@ -25,7 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <ConvexClientProvider>
-      <html lang="en">
+      <html lang="en" data-lt-installed="true">
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >

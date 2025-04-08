@@ -70,6 +70,10 @@ export const ChatInterface = ({ chatId, initialMessages }: ChatInterfaceProps) =
       if (!response.ok) throw new Error("No response body available");
 
       //* Handle the stream
+      //* Create SSE a parser and stream reader
+      const parser = createSSEParser();
+      const reader = response.body?.getReader();
+      if (!reader) throw new Error("No response body reader available");
 
     } catch (error) {
       console.error("Error streaming response:", error);

@@ -1,5 +1,5 @@
 import SYSTEM_MESSAGE from "@/constants/systemMessage";
-import { AIMessage, BaseMessage, SystemMessage, trimMessages } from "@langchain/core/messages";
+import { AIMessage, BaseMessage, HumanMessage, SystemMessage, trimMessages } from "@langchain/core/messages";
 import { ChatPromptTemplate, MessagesPlaceholder } from "@langchain/core/prompts";
 import { ChatGroq } from "@langchain/groq";
 import { END, MemorySaver, MessagesAnnotation, START, StateGraph } from "@langchain/langgraph";
@@ -96,15 +96,58 @@ const createWorkflow = () => {
   return stateGraph;
 };
 
+function addCachingHeaders(messages: BaseMessage[]): BaseMessage[] {
+  // Rules of caching headers for turn-by-turn conversations
+  // 1. Cache the first SYSTEM message
+  // 2. Cache the LAST message
+  // 3. Cache the second to last HUMAN message
+
+  if (!messages.length) {
+    return messages;
+  }
+
+  const cachedMessages = [...messages];
+  const addCache = (message: BaseMessage) => {
+    message.content = [
+      {
+        type: "text",
+        text: message.content as string,
+        cache_control: {
+          type: "ephemeral", // set a cache breakpoint ( max number a breakpoint )
+        },
+      },
+    ];
+  };
+
+  addCache(cachedMessages.at(-1)!);
+
+  let humanCount = 0;
+  for (let i = cachedMessages.length - 1; i >= 0; i--) {
+    if (cachedMessages[i] instanceof HumanMessage) {
+      humanCount++;
+      if (humanCount === 2) {
+        addCache(cachedMessages[i]);
+        break;
+      }
+    }
+  }
+
+  return cachedMessages;
+}
+
 export async function submitQuestion(messages: BaseMessage[], chatId: string) {
-  const workflow = createWorkflow();
+  // Add Caching
+  const cachedMessages = addCachingHeaders(messages);
+
+  console.log("Messages: ", cachedMessages);
   // Create a checkpoint for the workflow
+  const workflow = createWorkflow();
   const checkpointer = new MemorySaver();
   const app = workflow.compile({ checkpointer });
 
   // Run the graph and stream
   const stream = await app.streamEvents(
-    { messages },
+    { messages: cachedMessages },
     {
       version: "v2",
       configurable: {
