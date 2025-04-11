@@ -1,5 +1,6 @@
 "use client";
 import { Doc, Id } from "@/convex/_generated/dataModel";
+import { createSSEParser } from "@/lib/createSSEParser";
 import { ChatRequestBody } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
@@ -17,7 +18,23 @@ export const ChatInterface = ({ chatId, initialMessages }: ChatInterfaceProps) =
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [streamedResponse, setStreamedResponse] = useState<string>("");
   const [currentTool, setCurrentTool] = useState<{ name: string; input: unknown } | null>(null);
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const processStream = async (
+    reader: ReadableStreamDefaultReader<Uint8Array>,
+    onChunk: (chunk: string) => Promise<void>
+  ) => {
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        await onChunk(new TextDecoder().decode(value));
+      }
+    } finally {
+      reader.releaseLock();
+    }
+  };
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -73,8 +90,14 @@ export const ChatInterface = ({ chatId, initialMessages }: ChatInterfaceProps) =
       //* Create SSE a parser and stream reader
       const parser = createSSEParser();
       const reader = response.body?.getReader();
+      //* Process the stream
       if (!reader) throw new Error("No response body reader available");
+      await processStream(reader, async (chunk) => {
+       const messages = parser.parse(chunk);
+        //**continuar aqui */
+      })
 
+      if (!reader) throw new Error("No response body reader available");
     } catch (error) {
       console.error("Error streaming response:", error);
       //* Remove optimistic message
