@@ -1,7 +1,7 @@
 "use client";
 import { Doc, Id } from "@/convex/_generated/dataModel";
 import { createSSEParser } from "@/lib/createSSEParser";
-import { ChatRequestBody } from "@/lib/types";
+import { ChatRequestBody, StreamMessageType } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -64,7 +64,7 @@ export const ChatInterface = ({ chatId, initialMessages }: ChatInterfaceProps) =
     setMessages((prev) => [...prev, optimisticUserMessage]);
 
     //* Track complete response for saving database
-    const fullResponse = "";
+    let fullResponse = "";
 
     //* Start Streaming Response
     try {
@@ -93,9 +93,31 @@ export const ChatInterface = ({ chatId, initialMessages }: ChatInterfaceProps) =
       //* Process the stream
       if (!reader) throw new Error("No response body reader available");
       await processStream(reader, async (chunk) => {
-       const messages = parser.parse(chunk);
-        //**continuar aqui */
-      })
+        const messages = parser.parse(chunk);
+
+        //* Handle each message
+        for (const message of messages) {
+          switch (message.type) {
+            case StreamMessageType.Token:
+              if ("token" in message) {
+                fullResponse += message.token;
+                setStreamedResponse(fullResponse);
+              }
+              break;
+
+            case StreamMessageType.ToolStart:
+              if ("tool" in message) {
+                setCurrentTool({
+                  name: message.tool,
+                  input: message.input,
+                });
+                fullResponse += formatTerminalIutput(message.tool, message.input, "Processing...");
+                setStreamedResponse(fullResponse);
+              }
+              break;
+          }
+        }
+      });
 
       if (!reader) throw new Error("No response body reader available");
     } catch (error) {
