@@ -115,6 +115,24 @@ export const ChatInterface = ({ chatId, initialMessages }: ChatInterfaceProps) =
                 setStreamedResponse(fullResponse);
               }
               break;
+
+            case StreamMessageType.ToolEnd:
+              if ("tool" in message && currentTool) {
+                //* Remplace el processing with menssage output
+                const lastTerminalIndex = fullResponse.lastIndexOf("<div class='bg-[#1e1e1e]'");
+                if (lastTerminalIndex !== -1) {
+                  fullResponse = fullResponse.substring(0, lastTerminalIndex);
+                  fullResponse += formatTerminalIutput(message.tool, message.input, message.output);
+                  setStreamedResponse(fullResponse);
+                }
+                setCurrentTool(null);
+              }
+              break;
+            case StreamMessageType.Error:
+              if ("error" in message) {
+                throw new Error(message.error);
+              }
+              break;
           }
         }
       });
@@ -160,7 +178,9 @@ export const ChatInterface = ({ chatId, initialMessages }: ChatInterfaceProps) =
               <Button
                 className={cn(
                   "absolute right-1.5 rounded-xl size-9 p-0 flex items-center justify-center transition-all",
-                  input.trim() ? "bg-blue-600 hover:bg-blue-700 text-white shadow-xs" : "bg-gray-100 text-gray-400"
+                  input.trim()
+                    ? "bg-blue-600 hover:bg-blue-700 text-white shadow-xs"
+                    : "bg-gray-100 text-gray-400"
                 )}
                 type="submit"
                 disabled={isLoading || !input.trim()}
