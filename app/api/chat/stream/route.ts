@@ -66,6 +66,10 @@ export async function POST(request: Request) {
                   });
                 }
               }
+            } else if (event.event === "on_chat_model_end") {
+              // Aseguramos que se envíe el mensaje Done cuando el modelo LLM termina
+              console.log("LLM completed, sending Done message");
+              await sendSSEMessage(writer, { type: StreamMessageType.Done });
             } else if (event.event === "on_tool_start") {
               await sendSSEMessage(writer, {
                 type: StreamMessageType.ToolStart,
@@ -80,9 +84,11 @@ export async function POST(request: Request) {
                 output: event.data.output,
               });
             }
-
-            await sendSSEMessage(writer, { type: StreamMessageType.Done });
           }
+          
+          // Enviamos el mensaje Done como respaldo si no se recibió el evento on_chat_model_end
+          await sendSSEMessage(writer, { type: StreamMessageType.Done });
+          console.log("Backup Done message sent");
         } catch (streamError) {
           console.log("Stream error: ", streamError);
           await sendSSEMessage(writer, {

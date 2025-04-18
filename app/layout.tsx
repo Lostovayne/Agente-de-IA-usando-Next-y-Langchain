@@ -25,7 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <ConvexClientProvider>
-      <html lang="en" data-lt-installed="true">
+      <html lang="en" data-lt-installed="true" suppressHydrationWarning >
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >

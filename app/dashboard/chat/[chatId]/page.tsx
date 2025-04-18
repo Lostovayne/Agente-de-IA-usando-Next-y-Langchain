@@ -1,10 +1,10 @@
+import ChatInterface from "@/components/chat-interface";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { getConvexClient } from "@/lib/convex";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
-import { ChatInterface } from "@/components/chat-interface";
 
 interface ChatPageParams {
   params: Promise<{ chatId: Id<"chats"> }>;

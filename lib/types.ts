@@ -3,7 +3,7 @@ import { Id } from "@/convex/_generated/dataModel";
 //* SSE Constants
 export const SSE_DATA_PREFIX = "data: " as const;
 export const SSE_DONE_MESSAGE = "[DONE]" as const;
-export const SSE_LINE_DELIMITER = "\n\N" as const;
+export const SSE_LINE_DELIMITER = "\n\n" as const;
 
 export type MessageRole = "user" | "assistant";
 
@@ -28,6 +28,7 @@ export enum StreamMessageType {
 }
 export interface BaseStreamMessage {
   type: StreamMessageType;
+  content: string;
 }
 export interface TokenMessage extends BaseStreamMessage {
   type: StreamMessageType.Token;
